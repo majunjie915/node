@@ -67,14 +67,16 @@
                 type:'post',
                 data: data,
                 success: function(data,status){ 
-                    if(status == 'success'){ 
-                        location.href = 'home';
-                    }
+                  if(data.code == 200){ 
+                    location.href = 'home';
+                  } else {
+                    alert(data.message)
+                  }
                 },
                 error: function(data,status){ 
-                    if(status == 'error'){ 
-                        location.href = 'login';
-                    }
+                  if(status == 'error'){ 
+                    location.href = 'login';
+                  }
                 }
             });
         });
