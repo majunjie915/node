@@ -71,24 +71,26 @@
             var password = $("#password").val();
             var password1 = $("#password1").val();
             if(password !== password1){ 
-                $("#password").css("border","1px solid red");
-                $("#password1").css("border","1px solid red");
+              $("#password").css("border","1px solid red");
+              $("#password1").css("border","1px solid red");
             }else if(password === password1){
-            var data = {"uname":username,"upwd":password};
-            $.ajax({ 
-                url: '/register',
-                type: 'post',
-                data: data,
-                success: function(data,status){ 
-                    if(status == 'success'){ 
-                        location.href = 'login';
+              var data = {"uname":username,"upwd":password};
+                $.ajax({ 
+                  url: '/register',
+                  type: 'post',
+                  data: data,
+                  success: function(data,status){ 
+                    if(data.code == 200){ 
+                      location.href = 'login';
+                    } else {
+                      alert(data.message);
                     }
-                },
-                error: function(data,err){ 
-                        location.href = 'register';
-                }
-            }); 
-        }
+                  },
+                  error: function(data,err){ 
+                    location.href = 'register';
+                  }
+              }); 
+            }
         });
     });
   </script>
