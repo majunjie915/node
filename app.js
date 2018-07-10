@@ -10,9 +10,6 @@ var usersRouter = require('./routes/users');
 var multer = require('multer');
 var mongoose = require('mongoose');
 
-global.dbHandel = require('./database/dbHandel');
-global.db = mongoose.connect("mongodb://localhost:27017/nodedb");
-
 var session = require('express-session');
 
 var app = express();

@@ -38,6 +38,7 @@
         })
       }
       getList();
+
       $('.ok').click(function() {
         if (!$('.title').val()) {
           alert('请填写标题');
@@ -56,10 +57,18 @@
             alert('提交成功');
             getList();
           } else {
-            alert('提交失败');
+            alert(data.message);
+            location.href = 'login';
           }
         })
       })
+
+      // $.post('/api/login', {
+      //   user: 'test',
+      //   pwd: 'test'
+      // }, function(data) {
+      //   console.log('----login', data);
+      // })
     </script>
   </body>
 </html>

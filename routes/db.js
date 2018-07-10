@@ -14,6 +14,37 @@ function _connectDB(callback) {
   })
 }
 
+// 设置初始登录用户名和密码
+(function init() {
+  let user = settings.user,
+    pwd = settings.pwd
+  let json = { "user": user, "pwd": pwd };
+  _connectDB(function(err, db) {
+    let usersCollection = db.collection('users')
+    usersCollection.find({ "user": user }).toArray(function(err, result) {
+      if (err) {
+        console.log('查询管理员失败')
+        db.close
+        return
+      }
+      if (result.length !== 0) {
+        db.close()
+        return
+        // usersCollection.deleteMany({ "user": user })
+      }
+      usersCollection.insertOne(json, function(err, res) {
+        if (err) {
+          console.log('管理员信息初始化失败')
+          db.close()
+          return
+        }
+        console.log('管理员信息初始化成功')
+        db.close()
+      })
+    })
+  })
+})()
+
 // 插入数据
 exports.insertOne = function(collectionName, json, callback) {
   _connectDB(function(err, db) {
@@ -45,7 +76,6 @@ exports.find = function(collectionName, queryJson, callback) {
 
       let cursor = db.collection(collectionName)
             .find(json).limit(limit).skip(count).sort(sort);
-      console.log(222, cursor);
       cursor.toArray(function(err, results) {
         if( err) {
           callback(err, null);
@@ -91,5 +121,20 @@ exports.updateMany = function(collectionName, jsonOld, jsonNew, callback) {
         db.close();
       }
     )
+  })
+}
+
+// 查找单个数据
+exports.findOne = function(collectionName, queryJson, callback) {
+  _connectDB(function(err, db) {
+    db.collection(collectionName).findOne(queryJson, function(err, resulters) {
+      if (err) {
+        callback(err, null);
+        db.close();
+        return;
+      }
+      callback(err, resulters);
+      db.close();
+    })
   })
 }

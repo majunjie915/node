@@ -56,30 +56,30 @@
   <script type="text/javascript">
     $(function(){ 
       $("#register0").click(function(){ 
-          location.href = 'register';
+        location.href = 'register';
       });
-      $("#login0").click(function(){ 
-            var username = $("#username").val();
-            var password = $("#password").val();
-            var data = {"uname":username,"upwd":password};
-            $.ajax({ 
-                url:'/login',
-                type:'post',
-                data: data,
-                success: function(data,status){ 
-                  if(data.code == 200){ 
-                    location.href = 'home';
-                  } else {
-                    alert(data.message)
-                  }
-                },
-                error: function(data,status){ 
-                  if(status == 'error'){ 
-                    location.href = 'login';
-                  }
-                }
-            });
+      $("#login0").click(function(){
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var data = {"user": username,"pwd": password};
+        $.ajax({ 
+          url:'/api/login',
+          type:'post',
+          data: data,
+          success: function(data, status){ 
+            if(data.code == 200){ 
+              location.href = '/';
+            } else {
+              alert(data.message)
+            }
+          },
+          error: function(data,status){ 
+            if(status == 'error'){ 
+              location.href = 'login';
+            }
+          }
         });
+      });
     });
   </script>
 </body>

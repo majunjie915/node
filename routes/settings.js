@@ -1,5 +1,8 @@
-let nickName = 'myproject';
+let md5 = require('./md5.js');
+let user = 'test';
+let pwd = md5('test');
 module.exports = {
   dbUrl: 'mongodb://localhost:27017/myproject',
-  nickName: nickName
+  user: user,
+  pwd: pwd
 }
