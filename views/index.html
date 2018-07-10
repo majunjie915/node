@@ -3,6 +3,7 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css" media="screen">
     <style type="text/css">
       a{margin-left: 20px; text-decoration: none;}
       a:hover{text-decoration: underline;}
@@ -11,9 +12,54 @@
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+    <div class="post">
+      <input type="text" class="title" placeholder="请输入标题"><br/>
+      <input type="text" class="content" placeholder="请输入标题"><br/>
+      <button class="ok">提交</button>
+    </div>
+    <div class="test"></div>
     
     <p><a href="/login">登录 </a>
     <a href="/register">   注册</a>
     </p>
+
+    <script type="text/javascript" src="javascripts/jquery-3.3.1.js"></script>
+    <script>
+      function getList() {
+        $.get('/api/test', {}, function (data) {
+          console.log('----data', data)
+          if (data.code == 200) {
+            var html = '', list = data.result || [];
+            for (var i = 0; i < list.length; i++) {
+              html += '<div>这是第' + i + '条数据：标题为' + list[i].title + '，内容为' + list[i].content + '</div>'
+            }
+            $('.test').empty().append(html);
+          }
+        })
+      }
+      getList();
+      $('.ok').click(function() {
+        if (!$('.title').val()) {
+          alert('请填写标题');
+          return false;
+        }
+        if (!$('.content').val()) {
+          alert('请填写内容');
+          return false;
+        }
+        $.post('/api/addtest', {
+          title: $('.title').val(),
+          content: $('.content').val()
+        }, function (data) {
+          console.log('----addtest', data)
+          if (data.code == 200) {
+            alert('提交成功');
+            getList();
+          } else {
+            alert('提交失败');
+          }
+        })
+      })
+    </script>
   </body>
 </html>

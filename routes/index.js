@@ -1,6 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
+// 我新增的api，用于连接到数据库
+var api = require('./api.js')
+
+// 我新增的测试接口
+router.get('/api/test', api.test)
+router.post('/api/addtest', api.addtest)
+
 /* GET / page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
