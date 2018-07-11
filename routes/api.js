@@ -5,7 +5,7 @@ const ObjectId = require('mongodb').ObjectId;
 const formidable = require('formidable');
 var sd = require('silly-datetime');
 const fs = require('fs');
-var AVATAR_UPLOAD_FOLDER = '/avatar'; // 上传图片存放路径，注意在本项目public文件夹下面新建avatar文件夹
+var AVATAR_UPLOAD_FOLDER = '/avatar/'; // 上传图片存放路径，注意在本项目public文件夹下面新建avatar文件夹
 
 exports.test = function(req, res, next) {
   db.find('mytest', { 'query': {} }, function(err, result) {
