@@ -109,7 +109,7 @@ exports.updateMany = function(collectionName, jsonOld, jsonNew, callback) {
     db.collection(collectionName).updateMany(
       jsonOld, {
         $set: jsonNew,
-        $curerntDate: { 'lastModified:': false}
+        $currentDate: { 'lastModified:': false}
       },
       function(err, resulters) {
         if (err) {

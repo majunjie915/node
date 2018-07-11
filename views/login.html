@@ -68,7 +68,7 @@
           data: data,
           success: function(data, status){ 
             if(data.code == 200){ 
-              location.href = '/';
+              location.href = document.referrer;
             } else {
               alert(data.message)
             }

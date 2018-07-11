@@ -1,6 +1,11 @@
 const db = require('./db.js');
 const jwt = require('jsonwebtoken');
-let md5 = require('./md5.js');
+const md5 = require('./md5.js');
+const ObjectId = require('mongodb').ObjectId;
+const formidable = require('formidable');
+var sd = require('silly-datetime');
+const fs = require('fs');
+var AVATAR_UPLOAD_FOLDER = '/avatar'; // 上传图片存放路径，注意在本项目public文件夹下面新建avatar文件夹
 
 exports.test = function(req, res, next) {
   db.find('mytest', { 'query': {} }, function(err, result) {
@@ -128,5 +133,109 @@ exports.register = function(req, res, next) {
         }
       });
     }
+  })
+}
+
+// 更新个人信息
+exports.updateUserinfo = function(req, res, next) {
+  let newData = {
+    "name": req.body.name,
+    "phone": req.body.phone,
+    "motto": req.body.motto
+  };
+  let testTel = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+  if (!testTel.test(req.body.phone)) {
+    return res.json({
+      "code": 401,
+      "message": "手机号码格式比正确"
+    });
+  }
+  // 注意这里用 ObjectId(req.cookies.id)
+  db.updateMany('users', { "_id": ObjectId(req.cookies.id) }, newData, function(err, result) {
+    if (err) {
+      return res.json({
+        "code": 401,
+        "message": "更新失败"
+      })
+    }
+
+    return res.json({
+      "code": 200,
+      "message": "更新成功"
+    })
+  })
+}
+
+// 上传图片
+exports.uploadImg = function(req, res, next) {
+  var form = new formidable.IncomingForm(); // 创建上传表单
+  form.encoding = 'utf-8'; // 设置编辑
+  form.uploadDir = 'public' + AVATAR_UPLOAD_FOLDER; // 设置上传目录
+  form.keepExtensions = true; // 保留后缀
+  form.maxFieldsSize = 2 * 1024 * 1024; // 文件大小
+
+  form.parse(req, function(err, fields, files) {
+    if (err) {
+      return res.json({
+        "code": 500,
+        "message": "内部服务器错误"
+      });
+    }
+
+    // 限制文件大小 单位默认字节 这里限制大小为2M
+    if (files.fulAvatar.size > form.maxFieldsSize) {
+      fs.unlink(files.fulAvatar.path);
+      return res.json({
+        "code": 401,
+        "message": "图片应小于2M"
+      });
+    }
+
+    var extName = ''; // 后缀名
+    switch(files.fulAvatar.type) {
+      case 'image/pjpeg':
+        extName = 'jpg';
+        break;
+      case 'image/jpeg':
+       extName = 'jpg';
+       break;
+      case 'image/png':
+        extName = 'png';
+        break;
+      case 'image/x-png':
+        extName = 'png';
+        break;
+    }
+
+    if (extName.length == 0) {
+      return res.json({
+        "code": 404,
+        "message": "只支持png和jpg格式图片"
+      });
+    }
+
+    //使用第三方模块silly-datetime
+    var t = sd.format(new Date(), 'YYYYMMDDHHmmss');
+    // 生成随机数
+    var ran = parseInt(Math.random() * 8999 + 10000);
+    // 生成新图片名称
+    var avatarName = t + '_' + ran + '.' + extName;
+    // 生成新图片地址
+    var newPath = form.uploadDir + avatarName;
+
+    // 更改名字和路径
+    fs.rename(files.fulAvatar.path, newPath, function(err) {
+      if (err) {
+        return res.json({
+          "code": 401,
+          "message": "图片上传失败"
+        });
+      }
+      return res.json({
+        "code": 200,
+        "message": "上传成功",
+        result: AVATAR_UPLOAD_FOLDER + avatarName
+      });
+    })
   })
 }

@@ -11,7 +11,10 @@ router.get('/api/test', api.test) // 获取数据
 router.route('/api/addtest').all(verifyToken).post(api.addtest) // 登录后操作
 router.post('/api/login', api.login) // 登录模块
 router.post('/api/register', api.register) // 注册模块
+router.post('/api/updateUserinfo', api.updateUserinfo) // 修改个人信息模块
+router.route('/api/uploadImg').all(verifyToken).post(api.uploadImg); // 图片上传模块
 
+// 下面是页面跳转的路由
 /* GET / page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -25,6 +28,11 @@ router.route("/login").get(function(req,res){    // 到达此路径则渲染logi
 /* GET register page. */
 router.route("/register").get(function(req,res){    // 到达此路径则渲染register文件，并传出title值供 register.html使用
   res.render("register",{title:'User register', message: '注册页面'});
+});
+
+/* GET userInfo page. */
+router.route("/userInfo").get(function(req,res){    // 到达此路径则渲染userInfo文件，并传出title值供 userInfo.html使用
+  res.render("userInfo",{title:'User infomation', message: '用户信息页面'});
 });
 
 /* GET home page. */
