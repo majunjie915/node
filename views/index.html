@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title><%= title %></title> <!-- 接受routes/index.js调用该模板传来的数据 -->
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel="stylesheet" href="stylesheets/bootstrap.min.css" media="screen">
     <style type="text/css">
@@ -62,13 +62,6 @@
           }
         })
       })
-
-      // $.post('/api/login', {
-      //   user: 'test',
-      //   pwd: 'test'
-      // }, function(data) {
-      //   console.log('----login', data);
-      // })
     </script>
   </body>
 </html>
