@@ -11,6 +11,9 @@
       border: 1px solid #eee;
       margin-bottom: 10px;
     }
+    .uploader-img {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -25,7 +28,9 @@
       <button class="update-info">提交</button>
     </div>
     <div>图片上传：<input type="file" name="fileToUpload" id="fileToUpload" class="fileupload" /></div>
-    <img style="width: 100px;" src="" />
+    <p class="uploader-img">
+      <img style="width: 100px;" src="" />
+    </p>
     <div class="test"></div>
 
   <script src="javascripts/jquery-3.3.1.js"></script>
@@ -49,6 +54,7 @@
               console.log('-------upload img:', data);
               if (data.code == 200) {
                 $('img').attr('src', data.result);
+                $('.uploader-img').show();
               } else if (data.code == 401) {
                 alert(data.message);
                 location.href = 'login';

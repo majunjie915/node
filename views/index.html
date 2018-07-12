@@ -12,17 +12,16 @@
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
+    <p class="avatar-img">
+      <a href="/userInfo"><img src="/images/avatar.png" alt=""></a>
+    </p>
     <div class="post">
       <input type="text" class="title" placeholder="请输入标题"><br/>
-      <input type="text" class="content" placeholder="请输入标题"><br/>
+      <input type="text" class="content" placeholder="请输入内容"><br/>
       <button class="ok">提交</button>
     </div>
     <div class="test"></div>
     
-    <p><a href="/login">登录 </a>
-    <a href="/register">   注册</a>
-    </p>
-
     <script type="text/javascript" src="javascripts/jquery-3.3.1.js"></script>
     <script>
       function getList() {

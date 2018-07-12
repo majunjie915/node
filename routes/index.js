@@ -32,6 +32,10 @@ router.route("/register").get(function(req,res){    // 到达此路径则渲染r
 
 /* GET userInfo page. */
 router.route("/userInfo").get(function(req,res){    // 到达此路径则渲染userInfo文件，并传出title值供 userInfo.html使用
+  if(!req.session.user){                     //到达/home路径首先判断是否已经登录
+    req.session.error = "请先登录"
+    res.redirect("/login");                //未登录则重定向到 /login 路径
+  }
   res.render("userInfo",{title:'User infomation', message: '用户信息页面'});
 });
 
