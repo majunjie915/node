@@ -18,7 +18,7 @@ var app = express();
 app.use(session({ 
   secret: 'secret',
   cookie:{ 
-    maxAge: 1000 * 60 * 30,
+    maxAge: 1000 * 60 * 60 * 24 * 30,
   }
 }));
 // view engine setup （设置模板位置和模板引擎格式）

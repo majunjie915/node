@@ -10,17 +10,19 @@
     </style>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <p class="avatar-img">
-      <a href="/userInfo"><img src="/images/avatar.png" alt=""></a>
-    </p>
-    <div class="post">
-      <input type="text" class="title" placeholder="请输入标题"><br/>
-      <input type="text" class="content" placeholder="请输入内容"><br/>
-      <button class="ok">提交</button>
+    <div class="index-wrap">
+      <h1><%= title %></h1>
+      <p>Welcome to <%= title %></p>
+      <p class="avatar-img">
+        <a href="/userInfo"><img src="/images/avatar.png" alt=""></a>
+      </p>
+      <div class="post">
+        <input type="text" class="title" placeholder="请输入标题"><br/>
+        <input type="text" class="content" placeholder="请输入内容"><br/>
+        <button class="ok">提交</button>
+      </div>
+      <ul class="content"></ul>
     </div>
-    <div class="test"></div>
     
     <script type="text/javascript" src="javascripts/jquery-3.3.1.js"></script>
     <script>
@@ -30,9 +32,14 @@
           if (data.code == 200) {
             var html = '', list = data.result || [];
             for (var i = 0; i < list.length; i++) {
-              html += '<div>这是第' + i + '条数据：标题为' + list[i].title + '，内容为' + list[i].content + '</div>'
+              html += '<li class="content-item" data-id="'+ list[i]._id +'">'
+                        + '<h3>这是第' + i + '条数据：</h3>' 
+                        + '<p class="title">标题为<span>' + list[i].title + '</span></p>' 
+                        + '<p class="content">内容为' + list[i].content + '</p>'
+                        + '<p class="delete-item"><img src="/images/wrong.png" ></p>' +
+                      '</li>';
             }
-            $('.test').empty().append(html);
+            $('.content').empty().append(html);
           }
         })
       }
@@ -58,6 +65,27 @@
           } else {
             alert(data.message);
             location.href = 'login';
+          }
+        })
+      })
+
+      $(document).on('click', '.delete-item', function() {
+        var $currLi = $(this).closest('li');
+        var data = {
+            title: $currLi.find('.title span').text(),
+          };
+        $.ajax({
+          url: '/api/deletetest',
+          type: 'post',
+          data: data,
+          dataType: 'json',
+          success: function(res) {
+            if (res.code == 200) {
+              console.log(111, data);
+              getList();
+            } else {
+              alert (res.message);
+            }
           }
         })
       })

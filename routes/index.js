@@ -8,7 +8,8 @@ const verifyToken = require('./verify-token.js')
 // 我新增的测试接口
 router.get('/api/test', api.test) // 获取数据
 // router.post('/api/addtest', api.addtest) // 添加数据
-router.route('/api/addtest').all(verifyToken).post(api.addtest) // 登录后操作
+router.route('/api/addtest').all(verifyToken).post(api.addtest) // 登录后添加操作
+router.route('/api/deletetest').all(verifyToken).post(api.deletetest) // 登录后删除操作
 router.post('/api/login', api.login) // 登录模块
 router.post('/api/register', api.register) // 注册模块
 router.post('/api/updateUserinfo', api.updateUserinfo) // 修改个人信息模块

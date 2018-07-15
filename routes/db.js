@@ -92,6 +92,7 @@ exports.find = function(collectionName, queryJson, callback) {
 exports.deleteMany = function(collectionName, json, callback) {
   _connectDB(function(err, db) {
     db.collection(collectionName).deleteMany(json, function(err, resulters) {
+      console.log(222, json);
       if (err) {
         callback(err, null);
         db.close();

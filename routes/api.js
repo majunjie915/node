@@ -46,6 +46,26 @@ exports.addtest = function(req, res, next) {
   })
 }
 
+exports.deletetest = function(req, res, next) {
+  let data = {
+    "title": req.body.title,
+  };
+  // 插入到数据库
+  db.deleteMany('mytest', data, function(err, result) {
+    if (err) {
+      return res.json({
+        "code": 401,
+        "message": "test删除失败"
+      })
+    }
+    return res.json({
+      "code": 200,
+      "message": "test删除成功",
+      "result": result
+    })
+  })
+}
+
 exports.login = function(req, res, next) {
   let user = req.body.user,
     pwd = md5(req.body.pwd);
@@ -68,7 +88,7 @@ exports.login = function(req, res, next) {
 
     let dbPassword = result.pwd;
     let id = result._id;
-    let expires = 60 * 60 * 24 * 30;
+    let expires = 1000 * 60 * 60 * 24 * 30;
     if (dbPassword === pwd) {
       // 根据查到的 id、user 按照一定的加密方式生成 token，并且缓存在 cookie 中，
       // 后期当用户使用别的接口时我们可以直接通过 req.cookies.token 获取到 token，
