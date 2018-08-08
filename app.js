@@ -16,6 +16,8 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 app.use(session({ 
+  resave: false, //添加 resave 选项
+  saveUninitialized: true, //添加 saveUninitialized 选项
   secret: 'secret',
   cookie:{ 
     maxAge: 1000 * 60 * 60 * 24 * 30,

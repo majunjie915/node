@@ -68,6 +68,8 @@
           data: data,
           success: function(data, status){ 
             if(data.code == 200){ 
+              localStorage.setItem('user', data.result.user);
+              localStorage.setItem('id', data.result._id);
               location.href = document.referrer;
             } else {
               alert(data.message)

@@ -12,6 +12,7 @@ router.route('/api/addtest').all(verifyToken).post(api.addtest) // 登录后添�
 router.route('/api/deletetest').all(verifyToken).post(api.deletetest) // 登录后删除操作
 router.post('/api/login', api.login) // 登录模块
 router.post('/api/register', api.register) // 注册模块
+router.get('/api/userInfo', api.userInfo) // 获取个人信息模块
 router.post('/api/updateUserinfo', api.updateUserinfo) // 修改个人信息模块
 router.route('/api/uploadImg').all(verifyToken).post(api.uploadImg); // 图片上传模块
 

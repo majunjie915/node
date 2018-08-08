@@ -50,7 +50,7 @@ exports.deletetest = function(req, res, next) {
   let data = {
     "title": req.body.title,
   };
-  // 插入到数据库
+  // 删除数据库中的记录
   db.deleteMany('mytest', data, function(err, result) {
     if (err) {
       return res.json({
@@ -101,7 +101,8 @@ exports.login = function(req, res, next) {
       req.session.user = result;
       return res.json({
         "code": 200,
-        "message": "登录成功"
+        "message": "登录成功",
+        "result": result
       })
     } else {
       req.session.error = "密码错误";
@@ -153,6 +154,28 @@ exports.register = function(req, res, next) {
         }
       });
     }
+  })
+}
+
+// 获取个人信息
+exports.userInfo = function(req, res, next) {
+  db.find('users', { 'query': {
+    user: req.body.user || req.cookies.user
+  } }, function(err, result) {
+    if (err) {
+      return res.json({
+        "code": 404,
+        "message": "数据查询失败",
+        "result": []
+      });
+    }
+    return res.json({
+      "code": 200,
+      "message": "数据获取成功",
+      "result": result,
+      "total": result.length
+    });
+    return next();
   })
 }
 
@@ -239,7 +262,8 @@ exports.uploadImg = function(req, res, next) {
     // 生成随机数
     var ran = parseInt(Math.random() * 8999 + 10000);
     // 生成新图片名称
-    var avatarName = t + '_' + ran + '.' + extName;
+    // var avatarName = t + '_' + ran + '.' + extName;
+    var avatarName = req.cookies.id + '.' + extName;
     // 生成新图片地址
     var newPath = form.uploadDir + avatarName;
 
