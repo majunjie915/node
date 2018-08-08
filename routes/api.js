@@ -8,22 +8,28 @@ const fs = require('fs');
 var AVATAR_UPLOAD_FOLDER = '/avatar/'; // 上传图片存放路径，注意在本项目public文件夹下面新建avatar文件夹
 
 exports.test = function(req, res, next) {
-  db.find('mytest', { 'query': {} }, function(err, result) {
-    if (err) {
+  db.find('mytest', 
+    { 
+      'query': {},
+      'limit': req.query.limit,
+      'page': req.query.page
+    }, 
+    function(err, result) {
+      if (err) {
+        return res.json({
+          "code": 404,
+          "message": "数据查询失败",
+          "result": []
+        });
+      }
       return res.json({
-        "code": 404,
-        "message": "数据查询失败",
-        "result": []
+        "code": 200,
+        "message": "数据获取成功",
+        "result": result,
+        "total": result.length
       });
-    }
-    return res.json({
-      "code": 200,
-      "message": "数据获取成功",
-      "result": result,
-      "total": result.length
-    });
-    return next();
-  })
+      return next();
+    })
 }
 
 exports.addtest = function(req, res, next) {

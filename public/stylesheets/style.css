@@ -28,3 +28,11 @@ html,body,body div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,ad
   width: 26px;
   height: 26px;
 }
+.index-wrap .pages button {
+  border: solid 1px #065af5;
+  color: #065af5;
+}
+.index-wrap .pages .disable {
+  border-color: rgba(184, 180, 180, 0.774);
+  color: rgb(159, 162, 165);
+}

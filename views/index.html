@@ -22,24 +22,41 @@
         <button class="ok">提交</button>
       </div>
       <ul class="content"></ul>
+      <p class="pages">
+        <button class="pre disable">&lt;上一页</button>
+        <button class="next">下一页&gt;</button>
+      </p>
     </div>
     
     <script type="text/javascript" src="javascripts/jquery-3.3.1.js"></script>
     <script>
+      let currentPage = 1;
+      let total;
+      let limit = 10;
       function getList() {
-        $.get('/api/test', {}, function (data) {
+        $.get('/api/test', {
+          limit: limit,
+          page: currentPage
+        }, function (data) {
           console.log('----data', data)
           if (data.code == 200) {
             var html = '', list = data.result || [];
+            if (list.length === 0) {
+              $('.next').addClass('disable');
+              currentPage -= 1;
+              return;
+            }
             for (var i = 0; i < list.length; i++) {
               html += '<li class="content-item" data-id="'+ list[i]._id +'">'
-                        + '<h3>这是第' + i + '条数据：</h3>' 
+                        + '<h3>这是第' + (i + 1) + '条数据：</h3>' 
                         + '<p class="title">标题为<span>' + list[i].title + '</span></p>' 
                         + '<p class="content">内容为' + list[i].content + '</p>'
                         + '<p class="delete-item"><img src="/images/wrong.png" ></p>' +
                       '</li>';
             }
             $('.content').empty().append(html);
+            total = data.total;
+            if (total < limit ) $('.next').addClass('disable');
           }
         })
       }
@@ -89,6 +106,26 @@
             }
           }
         })
+      })
+
+      // 上一页
+      $('.pre').on('click', function(e) {
+        e.stopPropagation();
+        if (currentPage === 1) return;
+        currentPage -= 1;
+        getList();
+        if (currentPage === 1) {
+          $(this).addClass('disable');
+          $('.next').removeClass('disable');
+        }
+      })
+      // 下一页
+      $('.next').on('click', function(e) {
+        e.stopPropagation();
+        if ($(this).hasClass('disable')) return;
+        $('.pre').removeClass('disable');
+        currentPage += 1;
+        getList();
       })
     </script>
   </body>
